@@ -105,6 +105,7 @@
             Clipboard: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>,
             Zap: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
             Headphones: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>,
+            Video: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>,
         };
 
         const SCHOOL_LOGO_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyN3mWov9dfmibFROZWaV8thDqrITIPkcJWw&s";
@@ -262,7 +263,7 @@
                         </div>
                         
                         <div className="hidden md:flex space-x-2">
-                            {['Home', 'Podcast', 'Responsibilities', 'Change', 'Factors', 'Plan'].map((item) => {
+                            {['Home', 'Introduction', 'Responsibilities', 'Change', 'Factors', 'Plan'].map((item) => {
                                 const id = item.toLowerCase();
                                 const isActive = activeTab === id;
                                 return (
@@ -297,7 +298,7 @@
                 </div>
                 {isMenuOpen && (
                     <div className="md:hidden bg-slate-800 border-t border-slate-700">
-                        {['Home', 'Podcast', 'Responsibilities', 'Change', 'Factors', 'Plan'].map((item) => (
+                        {['Home', 'Introduction', 'Responsibilities', 'Change', 'Factors', 'Plan'].map((item) => (
                             <button
                                 key={item}
                                 onClick={() => { setActiveTab(item.toLowerCase()); setIsMenuOpen(false); }}
@@ -628,82 +629,109 @@
             );
         };
 
-        const Podcast = () => {
+        const Introduction = () => {
             const audioRef = useRef(null);
+            const videoRef = useRef(null);
             const [showUpload, setShowUpload] = useState(false);
 
-            const handleFileChange = (event) => {
+            const handleFileChange = (event, type) => {
                 const file = event.target.files[0];
                 if (file) {
                     const objectUrl = URL.createObjectURL(file);
-                    audioRef.current.src = objectUrl;
-                    audioRef.current.play();
+                    if (type === 'audio') {
+                        audioRef.current.src = objectUrl;
+                        audioRef.current.play();
+                    } else if (type === 'video') {
+                        videoRef.current.src = objectUrl;
+                        videoRef.current.play();
+                    }
                 }
             };
 
             return (
                 <div className="max-w-4xl mx-auto px-4 py-16">
                     <div className="text-center mb-12">
-                        <span className="text-amber-600 font-bold uppercase tracking-wider text-sm">Audio Learning</span>
-                        <h2 className="text-3xl font-bold text-slate-900 mt-2">Deep Dive Discussion</h2>
-                        <p className="text-slate-500 mt-2">Listen to an AI-generated conversation analyzing Marzano's research.</p>
+                        <span className="text-amber-600 font-bold uppercase tracking-wider text-sm">Welcome</span>
+                        <h2 className="text-3xl font-bold text-slate-900 mt-2">Introduction & Overview</h2>
+                        <p className="text-slate-500 mt-2">Watch the video or listen to the podcast to get started.</p>
                     </div>
 
-                    <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
-                        <div className="bg-slate-900 p-8 md:p-12 relative overflow-hidden">
-                            {/* Decorative waveforms */}
-                            <div className="absolute top-1/2 left-0 right-0 h-32 -translate-y-1/2 opacity-20 flex justify-center items-center gap-1">
-                                {[...Array(20)].map((_, i) => (
-                                    <div key={i} className="w-2 bg-amber-500 rounded-full animate-pulse" style={{height: Math.random() * 100 + '%', animationDuration: Math.random() * 1 + 0.5 + 's'}}></div>
-                                ))}
-                            </div>
-                            
-                            <div className="relative z-10 flex flex-col items-center text-center">
-                                <div className="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center text-white mb-6 shadow-lg shadow-amber-500/50">
-                                    <Icons.Headphones />
-                                </div>
-                                <h3 className="text-2xl font-bold text-white mb-2">School Leadership That Works</h3>
-                                <p className="text-amber-400 font-medium mb-8">NotebookLM Audio Overview</p>
-                                
-                                <audio ref={audioRef} controls className="w-full max-w-lg mb-4" src="podcast.m4a">
-                                    Your browser does not support the audio element.
-                                </audio>
-
-                                <div className="mt-6 flex flex-col items-center">
-                                    <button 
-                                        onClick={() => setShowUpload(!showUpload)} 
-                                        className="text-xs text-slate-500 hover:text-white transition-colors underline mb-2"
-                                    >
-                                        Admin: Test Local File
-                                    </button>
+                    <div className="grid grid-cols-1 gap-8">
+                        {/* Video Section */}
+                        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+                            <div className="bg-slate-900 p-8 relative overflow-hidden text-center">
+                                <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                                <div className="relative z-10 flex flex-col items-center">
+                                    <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white mb-4 shadow-lg shadow-blue-500/50">
+                                        <Icons.Video />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-6">Video Introduction</h3>
                                     
-                                    {showUpload && (
-                                        <div className="p-4 bg-slate-800/80 rounded-lg backdrop-blur-sm border border-slate-700 max-w-lg transition-all">
-                                            <p className="text-slate-400 text-xs mb-2">Select a file from your computer to test:</p>
-                                            <input 
-                                                type="file" 
-                                                accept="audio/*" 
-                                                onChange={handleFileChange}
-                                                className="text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-600 file:text-white hover:file:bg-amber-500"
-                                            />
-                                        </div>
-                                    )}
+                                    <video ref={videoRef} controls className="w-full max-w-lg rounded-lg shadow-2xl border-2 border-slate-700 bg-black" src="video.mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="p-8 md:p-12 bg-slate-50">
-                            <h4 className="font-bold text-slate-900 mb-4 flex items-center">
-                                <Icons.Brain className="w-5 h-5 text-amber-600 mr-2" />
-                                Why listen?
-                            </h4>
-                            <p className="text-slate-600 mb-4">
-                                This audio overview uses advanced AI to synthesize the key concepts of "School Leadership That Works." It discusses the 21 responsibilities, the nuances of First vs. Second Order change, and how to select the "Right Work" in a conversational format.
-                            </p>
-                            <p className="text-sm text-slate-500 italic">
-                                Note: If the audio player isn't loading, ensure the file <strong>podcast.m4a</strong> is uploaded to the same folder as this website.
-                            </p>
+                        {/* Audio Section */}
+                        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+                            <div className="bg-slate-900 p-8 relative overflow-hidden text-center">
+                                <div className="absolute top-1/2 left-0 right-0 h-32 -translate-y-1/2 opacity-20 flex justify-center items-center gap-1">
+                                    {[...Array(20)].map((_, i) => (
+                                        <div key={i} className="w-2 bg-amber-500 rounded-full animate-pulse" style={{height: Math.random() * 100 + '%', animationDuration: Math.random() * 1 + 0.5 + 's'}}></div>
+                                    ))}
+                                </div>
+                                
+                                <div className="relative z-10 flex flex-col items-center">
+                                    <div className="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center text-white mb-4 shadow-lg shadow-amber-500/50">
+                                        <Icons.Headphones />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">Audio Podcast</h3>
+                                    <p className="text-amber-400 font-medium text-sm mb-6">AI NotebookLM Overview</p>
+                                    
+                                    <audio ref={audioRef} controls className="w-full max-w-lg" src="podcast.m4a">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div className="mt-8 text-center">
+                         <button 
+                            onClick={() => setShowUpload(!showUpload)} 
+                            className="text-xs text-slate-400 hover:text-slate-600 transition-colors underline mb-4"
+                        >
+                            Admin: Test Local Files
+                        </button>
+                        
+                        {showUpload && (
+                            <div className="p-6 bg-slate-100 rounded-xl border border-slate-200 max-w-lg mx-auto text-left">
+                                <p className="font-bold text-slate-700 text-sm mb-3">Developer Testing Tools:</p>
+                                <div className="mb-4">
+                                    <label className="block text-xs font-bold text-slate-500 mb-1">Test Audio File:</label>
+                                    <input 
+                                        type="file" 
+                                        accept="audio/*" 
+                                        onChange={(e) => handleFileChange(e, 'audio')}
+                                        className="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-700 hover:file:bg-amber-200"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-slate-500 mb-1">Test Video File:</label>
+                                    <input 
+                                        type="file" 
+                                        accept="video/*" 
+                                        onChange={(e) => handleFileChange(e, 'video')}
+                                        className="text-xs w-full text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        <p className="text-sm text-slate-500 italic mt-4">
+                            Note: Ensure <strong>podcast.m4a</strong> and <strong>video.mp4</strong> are in the same folder.
+                        </p>
                     </div>
                 </div>
             );
@@ -718,12 +746,17 @@
                     <Nav activeTab={activeTab} setActiveTab={setActiveTab} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
                     
                     <main>
-                        {activeTab === 'home' && <Home onStart={() => setActiveTab('responsibilities')} />}
+                        {/* Always rendered, hidden via CSS for persistence */}
+                        <div style={{ display: activeTab === 'introduction' ? 'block' : 'none' }}>
+                            <Introduction />
+                        </div>
+
+                        {/* Standard Conditional Rendering */}
+                        {activeTab === 'home' && <Home onStart={() => setActiveTab('introduction')} />}
                         {activeTab === 'responsibilities' && <Responsibilities />}
                         {activeTab === 'change' && <Change />}
                         {activeTab === 'factors' && <Factors />}
                         {activeTab === 'plan' && <Plan />}
-                        {activeTab === 'podcast' && <Podcast />}
                     </main>
                 </div>
             );
